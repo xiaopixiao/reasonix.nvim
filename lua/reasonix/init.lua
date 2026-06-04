@@ -10,11 +10,16 @@ local defaults = {
     win = {
       position = 'right',
       width = 0.3,
-      on_win = function(self)
-        -- override minimal style defaults applied by snacks.nvim
-        vim.wo[self.win].wrap = true               -- wrap long lines
-        vim.wo[self.win].fillchars = "eob: "        -- no … at bottom
-      end,
+      minimal = false,
+      wo = {
+        number = false,
+        relativenumber = false,
+        signcolumn = "no",
+        statuscolumn = "",
+        wrap = true,
+        fillchars = "eob: ,lastline: ",
+        list = false,
+      },
     },
     env = { TERM = 'xterm-256color' },
     start_insert = true,
