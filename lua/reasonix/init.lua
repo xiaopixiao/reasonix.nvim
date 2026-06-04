@@ -10,16 +10,6 @@ local defaults = {
     win = {
       position = 'right',
       width = 0.3,
-      minimal = false,
-      wo = {
-        number = false,
-        relativenumber = false,
-        signcolumn = "no",
-        statuscolumn = "",
-        wrap = true,
-        fillchars = "eob: ,lastline: ",
-        list = false,
-      },
     },
     env = { TERM = 'xterm-256color' },
     start_insert = true,
@@ -35,12 +25,19 @@ function M.setup(opts)
 
   local function open_terminal()
     local Snacks = require "snacks"
-    Snacks.terminal.open(config.terminal.command, {
+    local term = Snacks.terminal.open(config.terminal.command, {
       start_insert = config.terminal.start_insert,
       auto_insert = config.terminal.auto_insert,
       env = config.terminal.env,
       win = config.terminal.win,
     })
+    -- force override after snacks.nvim applies its minimal style
+    vim.schedule(function()
+      if term and term:win_valid() then
+        vim.wo[term.win].wrap = true
+        pcall(vim.api.nvim_set_option_value, "fillchars", "eob: ,lastline: ", { scope = "local", win = term.win })
+      end
+    end)
   end
 
   vim.api.nvim_create_user_command("Reasonix", open_terminal, {
