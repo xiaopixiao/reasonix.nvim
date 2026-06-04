@@ -31,13 +31,31 @@ function M.setup(opts)
       env = config.terminal.env,
       win = config.terminal.win,
     })
-    -- force override after snacks.nvim applies its minimal style
-    vim.schedule(function()
+
+    -- force wrap and clean fillchars for the reasonix terminal
+    local function ensure_wrap()
       if term and term:win_valid() then
         vim.wo[term.win].wrap = true
-        pcall(vim.api.nvim_set_option_value, "fillchars", "eob: ,lastline: ", { scope = "local", win = term.win })
+        pcall(vim.api.nvim_set_option_value, "fillchars", "eob: ", {
+          scope = "local",
+          win = term.win,
+        })
       end
-    end)
+    end
+
+    -- apply immediately, then re-apply every time the window is entered
+    -- (snacks.nvim may reset wrap after our initial override)
+    vim.schedule(ensure_wrap)
+
+    local augroup = vim.api.nvim_create_augroup("ReasonixWrap", { clear = true })
+    vim.api.nvim_create_autocmd("WinEnter", {
+      group = augroup,
+      callback = function()
+        if term and term.buf and vim.api.nvim_win_get_buf(0) == term.buf then
+          ensure_wrap()
+        end
+      end,
+    })
   end
 
   vim.api.nvim_create_user_command("Reasonix", open_terminal, {
