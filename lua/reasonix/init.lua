@@ -11,8 +11,8 @@ local defaults = {
       position = 'right',
       width = 0.3,
       wo = {
-        fillchars = "eob: ,lastline:", -- don't truncate the last line with …
-        wrap = true,                   -- wrap long lines instead of clipping
+        fillchars = "eob: ",            -- remove lastline:… (defaults to blank)
+        wrap = true,                    -- wrap long lines instead of clipping
       },
     },
     env = { TERM = 'xterm-256color' },
