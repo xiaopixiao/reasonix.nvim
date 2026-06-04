@@ -12,8 +12,8 @@ local defaults = {
       width = 0.3,
     },
     env = { TERM = 'xterm-256color' },
-    start_insert = true,
-    auto_insert = true,
+    start_insert = true, -- enter terminal mode on first open
+    auto_insert = false,  -- allow scrolling: <C-\><C-N> to normal, i to return
   },
 }
 
