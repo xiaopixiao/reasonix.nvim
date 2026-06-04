@@ -7,15 +7,13 @@ local M = {}
 local defaults = {
   terminal = {
     command = 'reasonix',
-    snacks_win_opts = {
-      wo = {
-        winblend = 100,
-        winhighlight = 'NormalFloat:MyTransparentGroup',
-      },
-    },
     win = {
       position = 'right',
       width = 0.3,
+      wo = {
+        fillchars = "eob: ,lastline:", -- don't truncate the last line with …
+        wrap = true,                   -- wrap long lines instead of clipping
+      },
     },
     env = { TERM = 'xterm-256color' },
     start_insert = true,
